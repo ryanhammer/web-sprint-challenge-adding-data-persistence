@@ -2,7 +2,7 @@ const express = require('express');
 
 const Tasks = require('./model');
 
-// const { checkCarPayload, checkVinNumberValid, checkCarId, checkVinNumberUnique } = require('./cars-middleware');
+const { validateTask } = require('./middleware');
 
 const router = express.Router()
 
@@ -14,20 +14,13 @@ router.get('/', (req, res, next) => {
     .catch(next)
 });
 
-router.post(
-  '/',
-  // checkCarPayload,
-  // checkVinNumberValid,
-  // checkVinNumberUnique,
-  (req, res, next) => 
-  {
-    Tasks.create(req.body)
-      .then(task => {
-        res.status(201).json(task);
-      })
-      .catch(next);
-  }
-);
+router.post('/', validateTask, (req, res, next) => {
+  Tasks.create(req.body)
+    .then(task => {
+      res.status(201).json(task);
+    })
+    .catch(next);
+});
 
 router.use( (err, req, res ) => {
   res.status(err.status || 500).json({

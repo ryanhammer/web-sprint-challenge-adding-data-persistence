@@ -23,7 +23,6 @@ const getById = async (project_id) => {
 }
 
 const create = async (project) => {
-
   const [project_id] = await db('projects').insert(project);
   return getById(project_id);
 }

@@ -2,7 +2,7 @@ const express = require('express');
 
 const Resources = require('./model');
 
-// const { checkCarPayload, checkVinNumberValid, checkCarId, checkVinNumberUnique } = require('./cars-middleware');
+const { validateResource } = require('./middleware');
 
 const router = express.Router()
 
@@ -14,20 +14,13 @@ router.get('/', (req, res, next) => {
     .catch(next)
 });
 
-router.post(
-  '/',
-  // checkCarPayload,
-  // checkVinNumberValid,
-  // checkVinNumberUnique,
-  (req, res, next) => 
-  {
-    Resources.create(req.body)
-      .then(resource => {
-        res.status(201).json(resource);
-      })
-      .catch(next);
-  }
-);
+router.post('/', validateResource, (req, res, next) => {
+  Resources.create(req.body)
+    .then(resource => {
+      res.status(201).json(resource);
+    })
+    .catch(next);
+});
 
 router.use( (err, req, res ) => {
   res.status(err.status || 500).json({
