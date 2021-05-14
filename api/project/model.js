@@ -13,7 +13,7 @@ const getAll = async () => {
 }
 
 const getById = async (project_id) => {
-  const project = await db('project').where({ project_id }).first();
+  const project = await db('projects').where({ project_id }).first();
   if (project.project_completed === 1) {
     project.project_completed = true;
   } else {
@@ -24,8 +24,8 @@ const getById = async (project_id) => {
 
 const create = async (project) => {
 
-  const [id] = await db('projects').insert(project);
-  return getById(id);
+  const [project_id] = await db('projects').insert(project);
+  return getById(project_id);
 }
 
 module.exports = { getAll, getById, create }
